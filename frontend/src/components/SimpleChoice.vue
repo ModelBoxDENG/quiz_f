@@ -34,12 +34,13 @@
 	  					<nav class="pagination" role="navigation" aria-label="pagination">
 
 	  						<!-- back button -->
-	  						<a class="button" v-on:click="prev();" :disabled="questionIndex < 1">
-								Back
-							</a>
+	  						<a class="button" v-on:click="prev();" :disabled="questionIndex < 1"
+                 style = "width:100px;color:#E4E7ED ;border :#E4E7ED 1px solid">
+                  Back
+                </a>
 
 	  						<!-- next button -->
-	  						<a class="button" :class="(userResponses[questionIndex]==null)?'':'is-active'" v-on:click="next();" :disabled="questionIndex>=quiz.questions.length">
+	  						<a style = "width:100px;color:#E4E7ED ;border :#E4E7ED 1px solid" class="button" :class="(userResponses[questionIndex]==null)?'':'is-active'" v-on:click="next();" :disabled="questionIndex>=quiz.questions.length">
 	                      {{ (userResponses[questionIndex]==null)?'Skip':'Next' }}
 	                    </a>
 
@@ -68,7 +69,23 @@
 							Total score: {{ score() }} / {{ quiz.questions.length }}
 						</p>
 							<br>
-							<a class="button" @click="restart()">restart <i class="fa fa-refresh"></i></a>
+              <a style = "width:300px"
+                class="button"
+                @click="restart()">
+
+                Historical Data
+                <i class="fa fa-refresh"></i>
+              </a>
+              </br>
+              </br>
+              </br>
+							<a style = "width:300px"
+                class="button"
+                @click="restart()">
+
+                 &nbsp&nbsp&nbspTry again?&nbsp&nbsp&nbsp&nbsp
+                <i class="fa fa-refresh"></i>
+              </a>
 						<!--/resultTitleBlock-->
 
 					</div>
@@ -213,7 +230,7 @@ export default {
         Vue.set(this.userResponses, this.questionIndex, this.userClicked);
         this.lastindex = index;
 
-
+        console.log(this.userResponses);
 
 
 
@@ -242,6 +259,7 @@ export default {
       // Return "true" count in userResponses
       score: function() {
         //this.quiz.questions[this.questionIndex].responses 和userreponse做对比
+         console.log(this.userResponses);
          this.if_timer = false;
          var dateValue = new Date();
          var score = 0;
@@ -283,19 +301,26 @@ export default {
 
          this.total_time = h + ":" + m + ":" + s;*/
          this.total_time = t;
-         for (var i = 0; i < this.userResponses.length; i++) {
-           flag = true;
-           for (var j = 0; j<this.userResponses[i].length;j++){
-             if (this.quiz.questions[i].responses[j].correct == undefined){
-               flag = false;
-               break;
+         if (this.userResponses.length>0){
+           for (var i = 0; i < this.userResponses.length; i++) {
+             flag = true;
+             if (this.userResponses[i]==null){
+               continue;
              }
-           }
-           if (flag == true){
-             score = score + 1;
-           }
+             for (var j = 0; j<this.userResponses[i].length;j++){
+               var choice_user_made = this.userResponses[i][j];
+               if (this.quiz.questions[i].responses[choice_user_made].correct == undefined){
+                 flag = false;
+                 break;
+               }
+             }
+             if (flag == true){
+               score = score + 1;
+             }
 
+           }
          }
+
          return score;
       }
    }
@@ -306,4 +331,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import '../assets/css.CSS';
+#aqq{
+  background: linear-gradient(#B8CDE6, #8C6695);
+}
 </style>
